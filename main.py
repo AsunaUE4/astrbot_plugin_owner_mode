@@ -64,29 +64,24 @@ class OwnerModePlugin(Star):
 
     @filter.command("bindprofile")
     @filter.permission_type(filter.PermissionType.ADMIN)
-    async def bind_profile(self, event: AstrMessageEvent, qq: str = None, persona_name: str = None):
-        """绑定 QQ 号到指定配置文件，用法：/bindprofile <QQ号> <配置文件名>"""
+    def bind_profile(self, event: AstrMessageEvent, qq: str = None, persona_name: str = None):
         if not qq or not persona_name:
             yield event.plain_result("用法：/bindprofile <QQ号> <配置文件名>")
             return
-
         persona_id = self.get_persona_id_by_name(persona_name)
         if not persona_id:
             yield event.plain_result(f"未找到名为 '{persona_name}' 的配置文件，请检查名称是否正确")
             return
-
         self.bindings[qq] = persona_id
         self.save_bindings()
         yield event.plain_result(f"已将 QQ {qq} 绑定到配置文件 '{persona_name}'")
 
     @filter.command("unbind")
     @filter.permission_type(filter.PermissionType.ADMIN)
-    async def unbind(self, event: AstrMessageEvent, qq: str = None):
-        """解除绑定，用法：/unbind <QQ号>"""
+    def unbind(self, event: AstrMessageEvent, qq: str = None):
         if not qq:
             yield event.plain_result("用法：/unbind <QQ号>")
             return
-
         if qq in self.bindings:
             del self.bindings[qq]
             self.save_bindings()
@@ -96,18 +91,14 @@ class OwnerModePlugin(Star):
 
     @filter.command("listbind")
     @filter.permission_type(filter.PermissionType.ADMIN)
-    async def list_bind(self, event: AstrMessageEvent):
-        """列出所有绑定关系"""
+    def list_bind(self, event: AstrMessageEvent):
         if not self.bindings:
             yield event.plain_result("当前没有任何绑定关系")
             return
-
-        # 获取所有人格以便显示名称
         persona_mgr = self.context.persona_manager
         if persona_mgr is None:
             yield event.plain_result("无法获取人格管理器")
             return
-
         personas = {p.persona_id: p.name for p in persona_mgr.get_all_personas()}
         lines = []
         for qq, pid in self.bindings.items():
