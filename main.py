@@ -14,18 +14,16 @@ class OwnerModePlugin(Star):
         self.load_bindings()
 
     def load_bindings(self):
-        """从持久化存储加载绑定关系"""
         try:
-            data = self.context.get_kv_data("owner_mode_bindings")
+            data = self.get_kv_data("owner_mode_bindings")  # 去掉 self.context
             if data:
                 self.bindings = json.loads(data)
         except Exception as e:
             logger.error(f"加载绑定数据失败: {e}")
 
     def save_bindings(self):
-        """保存绑定关系到持久化存储"""
         try:
-            self.context.put_kv_data("owner_mode_bindings", json.dumps(self.bindings))
+            self.put_kv_data("owner_mode_bindings", json.dumps(self.bindings))  # 去掉 self.context
         except Exception as e:
             logger.error(f"保存绑定数据失败: {e}")
 
