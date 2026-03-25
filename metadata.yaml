@@ -1,0 +1,6 @@
+name: owner_mode
+version: 1.0.0
+description: 根据 QQ 号动态切换人格配置文件的插件
+author: YourName
+display_name: 人格切换插件
+astrbot_version: ">=4.16"
